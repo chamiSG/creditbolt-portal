@@ -22,7 +22,7 @@ export const plaidRouter = createTRPCRouter({
     .input(z.object({
       userId: z.string(),
       legalName: z.string(),
-      accountId: z.string().optional(),
+      accountId: z.any().optional(),
       billId: z.string(),
       amount: z.string(),
       accessToken: z.string().optional(),
@@ -39,7 +39,7 @@ export const plaidRouter = createTRPCRouter({
       const accountIdOrNull =
         accountId != null && accountId !== "new" && accountId !== ""
           ? accountId
-          : '';
+          : null;
 
       try {
         // Call transferIntentCreate to invoke the transfer UI
@@ -261,7 +261,7 @@ const getTransferIntentId = async (
       bill_id: billId,
     },
   };
-  if (accountIdOrNull != null) {
+  if (accountIdOrNull != null && accountIdOrNull != '') {
     intentCreateObject.account_id = accountIdOrNull;
   }
 
