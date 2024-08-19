@@ -77,7 +77,7 @@ export default function Page() {
     generateLinkTokenForTransfer.mutateAsync({
       userId: info.id,
       legalName: legalName,
-      accountId: '',
+      accountId: info.id,
       billId: bill?.id,
       amount: MEMBERSHIP_FEE,
       accessToken: '',
