@@ -108,7 +108,7 @@ export default function Page() {
                       <TransferLink
                         label={lang.portal.payment.checking.button}
                         isDisabled={generateLinkTokenForTransfer.isPending}
-                        isLoading={transferRecurringCreate.isPending}
+                        isLoading={transferRecurringCreate.isPending || registerUser.isPending}
                         onAction={handleTransfer} />
                     )}
                   </Radio>
