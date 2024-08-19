@@ -67,6 +67,7 @@ export default function Page() {
   }
 
   useEffect(() => {
+    setPaymentType('checking')
     if (!info.id || !info.firstname || !info.lastname) {
       return
     }
