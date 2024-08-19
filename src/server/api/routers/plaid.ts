@@ -1,7 +1,6 @@
 import { z } from "zod";
 import {
   createTRPCRouter,
-  protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
 import { ID_VER_TEMPLATE, PLAID_COUNTRY_CODES, PLAID_IDV_PRODUCTS, PLAID_TRANSFER_PRODUCTS, plaidClient, WEBHOOK_URL_FOR_TRANSFOR } from "@/app/utils/plaid";
@@ -27,7 +26,7 @@ export const plaidRouter = createTRPCRouter({
       billId: z.string(),
       amount: z.string(),
       accessToken: z.string().optional(),
-      description: z.string().optional()
+      description: z.string()
     }))
     .mutation(async ({ input }) => {
       const { userId, legalName, accountId, billId, amount, accessToken, description } = input
@@ -40,7 +39,7 @@ export const plaidRouter = createTRPCRouter({
       const accountIdOrNull =
         accountId != null && accountId !== "new" && accountId !== ""
           ? accountId
-          : null;
+          : '';
 
       try {
         // Call transferIntentCreate to invoke the transfer UI
@@ -70,8 +69,7 @@ export const plaidRouter = createTRPCRouter({
           ...response.data,
           transferIntentId: transferIntentId
         }
-      } catch (error) {
-        console.error("Plaid API Error:", error.response?.data || error.message);
+      } catch (error: any) {
         throw new Error(error);
       }
     }),
@@ -98,7 +96,10 @@ export const plaidRouter = createTRPCRouter({
             access_token: tokenData.access_token,
           });
           const acctsData = acctsResponse.data;
-          accountId = acctsData.accounts[0].account_id;
+          if(!acctsData) {
+            return
+          }
+          accountId = acctsData?.accounts[0]?.account_id ?? '';
         }
 
         return { 
@@ -107,8 +108,7 @@ export const plaidRouter = createTRPCRouter({
           accessToken: tokenData.access_token, 
           accountId: accountId 
         }
-      } catch (error) {
-        console.error("Plaid API Error:", error.response?.data || error.message);
+      } catch (error: any) {
         throw new Error(error);
       }
     }),
@@ -129,14 +129,13 @@ export const plaidRouter = createTRPCRouter({
           identity_verification: {
             template_id: ID_VER_TEMPLATE,
           },
-          client_name: process.env.APP_NAME,
+          client_name: process.env.APP_NAME || 'CreditBolt',
           language: "en",
           country_codes: PLAID_COUNTRY_CODES,
         });
 
         return tokenResponse.data
-      } catch (error) {
-        console.error("Plaid API Error:", error.response?.data || error.message);
+      } catch (error: any) {
         throw new Error(error);
       }
     }),
@@ -156,15 +155,15 @@ export const plaidRouter = createTRPCRouter({
       const request: TransferRecurringCreateRequest = {
         access_token: accessToken,
         account_id: accountId,
-        type: TransferType['Credit'],
-        network: TransferRecurringNetwork['Ach'],
+        type: TransferType.Credit,
+        network: TransferRecurringNetwork.Ach,
         amount: amountAsString,
-        ach_class: ACHClass['Ppd'],
+        ach_class: ACHClass.Ppd,
         description: description,
         idempotency_key: uuidv4(),
         schedule: {
           start_date: moment().format('YYYY-MM-DD'),
-          interval_unit: TransferScheduleIntervalUnit['Month'],
+          interval_unit: TransferScheduleIntervalUnit.Month,
           interval_count: 1,
           interval_execution_day: 5
         },
@@ -175,10 +174,13 @@ export const plaidRouter = createTRPCRouter({
 
       try {
         const response = await plaidClient.transferRecurringCreate(request);
-        const recurringTransferId = response.data.recurring_transfer.recurring_transfer_id;
+        if(!response.data){
+          return
+        }
+        const recurringTransferId = response.data.recurring_transfer?.recurring_transfer_id;
         console.log(response.data)
         return recurringTransferId
-      } catch (error) {
+      } catch (error: any) {
         // handle error
         throw new Error(error);
       }
@@ -194,7 +196,6 @@ export const plaidRouter = createTRPCRouter({
           identity_verification_id: sessionId,
         });
         const IDVData = IDVResult.data;
-        console.dir(IDVData, { colors: true, depth: null });
         if (IDVData.status !== "success") {
           await ctx.db.user.update({
             where: {
@@ -212,9 +213,9 @@ export const plaidRouter = createTRPCRouter({
               id: IDVData.client_user_id,
             },
             data: {
-              firstname: IDVData.user.name.given_name,
-              lastname: IDVData.user.name.family_name,
-              mobile: IDVData.user.phone_number,
+              firstname: IDVData.user?.name?.given_name,
+              lastname: IDVData.user?.name?.family_name,
+              mobile: IDVData.user.phone_number || '',
               is_verified: true,
               idv_status: IDVData.status,
               most_recent_idv_session: sessionId,
@@ -225,19 +226,18 @@ export const plaidRouter = createTRPCRouter({
           status: IDVData.status,
           userId: IDVData.client_user_id
         };
-      } catch (error) {
-        console.error("Plaid API Error:", error.response?.data || error.message);
+      } catch (error: any) {
         throw new Error(error);
       }
     }),
 
-  getById: protectedProcedure.query(async ({ ctx }) => {
-    const post = await ctx.db.user.findFirst({
-      where: { id: ctx.session.user.id },
-    });
+  // getById: protectedProcedure.query(async ({ ctx }) => {
+  //   const post = await ctx.db.user.findFirst({
+  //     where: { id: ctx.session.user.id },
+  //   });
 
-    return post ?? null;
-  }),
+  //   return post ?? null;
+  // }),
 });
 
 const getTransferIntentId = async (

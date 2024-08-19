@@ -3,6 +3,7 @@ import { type Metadata } from "next";
 import { TRPCReactProvider } from "@/trpc/react";
 import { ChakraProviders } from "@/app/provider/ChakraProviders";
 import { GlobalStoreProvider } from "@/app/provider/GlobalStoreProvider";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: process.env.APP_NAME,
@@ -19,7 +20,9 @@ export default function RootLayout({
         <GlobalStoreProvider>
           <ChakraProviders>
             <TRPCReactProvider>
-              {children}
+              <Suspense>
+                {children}
+              </Suspense>
             </TRPCReactProvider>
           </ChakraProviders>
         </GlobalStoreProvider>

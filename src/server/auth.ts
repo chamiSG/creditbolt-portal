@@ -54,12 +54,10 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email Address", type: "email" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials, req) {
-        const { email, password } = credentials
-
-        const user = await db.user.findUnique({
+      async authorize(credentials: any) {
+        const user: any = await db.user.findUnique({
           where: {
-            email: email,
+            email: credentials?.email,
           },
           select: {
             id: true,
@@ -70,7 +68,7 @@ export const authOptions: NextAuthOptions = {
         console.log("user", user)
 
         const passwordCheck = await compare(
-          password || "",
+          credentials?.password || "",
           user.password
         );
         if (passwordCheck && user) {

@@ -3,7 +3,7 @@ export * from './identity-steps';
 
 
 export const getTemplateRows = (fields: FormFieldProps[]) => {
-  let count = fields.length
+  const count = fields.length
   const filterByColSpan = fields?.filter((field: FormFieldProps) => field.colSpan === 1).length
   return count - Math.floor(filterByColSpan / 2)
 }

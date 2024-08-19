@@ -13,7 +13,7 @@ export const ProductCard = ({
   path: string,
   lang: any
   variant?: string
-  isLearnMore?: Boolean
+  isLearnMore?: boolean
 }) => {
 
   return (

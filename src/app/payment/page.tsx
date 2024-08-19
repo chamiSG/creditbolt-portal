@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Container, Flex, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Radio, RadioGroup, Stack, Text, useDisclosure, useToast, VStack } from "@chakra-ui/react";
 import { api } from "@/trpc/react";
 import { useGlobalStore } from "@/app/provider/GlobalStoreProvider";
@@ -87,6 +87,7 @@ export default function Page() {
 
   return (
     <>
+    <Suspense>
       <Container maxW='8xl' display={'flex'} justifyContent={'center'}>
         <Card maxW='lg' py={16} px={10} h={'full'}>
           <VStack mb={6} alignItems={'start'}>
@@ -159,6 +160,7 @@ export default function Page() {
           </ModalFooter>
         </ModalContent>
       </Modal>
+    </Suspense>
     </>
   );
 }

@@ -2,17 +2,17 @@ import { Configuration, PlaidEnvironments, PlaidApi, CountryCode, Products } fro
 import { v4 as uuidv4 } from 'uuid';
 
 export const PLAID_ENV = (process.env.PLAID_ENV || "sandbox").toLowerCase();
-export const ID_VER_TEMPLATE = process.env.TEMPLATE_ID;
+export const ID_VER_TEMPLATE = process.env.TEMPLATE_ID || '';
 
 export const PLAID_TRANSFER_PRODUCTS = [
-  Products['Transfer']
+  Products.Transfer
 ]
 
 export const PLAID_IDV_PRODUCTS = [
-  Products['IdentityVerification']
+  Products.IdentityVerification
 ]
 
-export const PLAID_COUNTRY_CODES = [CountryCode['Us']];
+export const PLAID_COUNTRY_CODES = [CountryCode.Us];
 
 export const WEBHOOK_URL_FOR_TRANSFOR = process.env.WEBHOOK_URL_FOR_TRANSFOR
 

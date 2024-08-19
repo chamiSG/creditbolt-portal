@@ -13,7 +13,7 @@ const TransferLink = ({
   label: string, 
   isDisabled: boolean, 
   isLoading: boolean, 
-  onAction?: (data: any) => void 
+  onAction: (data: any) => void 
 }) => {
   const { plaid, setItemId, setAccessToken, setAccountId } = useGlobalStore(
     (state: any) => state,

@@ -3,12 +3,12 @@ import { Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel,
 import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { InputMask } from "@react-input/mask";
-import Autocomplete from "react-google-autocomplete";
+// import Autocomplete from "react-google-autocomplete";
 import lang from '@/snippet/en.json'
 
 import Card from '@/app/_components/card/Card';
 import { Icon } from "@chakra-ui/icons";
-import { getTemplateRows, GOOGLE_MAPS_API_KEY } from "@/app/utils";
+import { getTemplateRows } from "@/app/utils";
 import { FiCheck, FiEye, FiEyeOff } from "react-icons/fi";
 import { useGlobalStore } from "@/app/provider/GlobalStoreProvider";
 

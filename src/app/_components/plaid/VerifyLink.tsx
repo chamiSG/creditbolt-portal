@@ -1,11 +1,10 @@
-import { redirectPath } from "@/app/actions/redirect";
 import { useGlobalStore } from "@/app/provider/GlobalStoreProvider";
 import { api } from "@/trpc/react";
 import { Button } from "@chakra-ui/react";
 import React, { useEffect, useCallback } from "react";
 import { usePlaidLink } from "react-plaid-link";
 
-const PlaidLink = ({ 
+const VerifyLink = ({ 
   label, 
   isDisabled, 
   isLoading, 
@@ -14,7 +13,7 @@ const PlaidLink = ({
   label: string, 
   isDisabled: boolean, 
   isLoading: boolean, 
-  onAction?: (data: any) => void 
+  onAction: (data: any) => void 
 }) => {
 
   const { plaid } = useGlobalStore(
@@ -43,8 +42,6 @@ const PlaidLink = ({
   };
 
   if (window.location.href.includes("?oauth_state_id=")) {
-    // TODO: figure out how to delete this ts-ignore
-    // @ts-ignore
     config.receivedRedirectUri = window.location.href;
     isOauth = true;
   }
@@ -64,6 +61,6 @@ const PlaidLink = ({
   );
 };
 
-PlaidLink.displayName = "Link";
+VerifyLink.displayName = "VerifyLink";
 
-export default PlaidLink;
+export default VerifyLink;

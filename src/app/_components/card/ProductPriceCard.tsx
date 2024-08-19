@@ -14,7 +14,7 @@ export const ProductPriceCard = ({
   path: string
   lang: any
   variant?: string
-  monthly?: Boolean
+  monthly?: boolean
 }) => {
 
   return (
