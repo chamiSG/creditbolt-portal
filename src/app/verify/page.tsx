@@ -69,7 +69,7 @@ export default function Page() {
     }
     console.log("Verify")
     generateLinkTokenForIdv.mutate({ userId: info.id, email: info.email })
-  }, [info, generateLinkTokenForIdv])
+  }, [info])
 
   return (
     <Suspense>

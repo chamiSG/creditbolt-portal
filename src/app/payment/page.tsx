@@ -85,7 +85,7 @@ export default function Page() {
       accessToken: '',
       description: "Membership Fee"
     })
-  }, [info, generateLinkTokenForTransfer])
+  }, [info])
 
   return (
     <>
