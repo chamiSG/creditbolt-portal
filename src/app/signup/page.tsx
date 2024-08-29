@@ -2,10 +2,10 @@
 "use client";
 
 import { Container } from "@chakra-ui/react";
-import { signupSteps } from '@/app/utils'
+import { signupSteps } from '@/utils'
 import FormSignUpWizard from "@/app/_components/forms/signup/FormSignUpWizard";
 import { redirectPath } from "../actions/redirect";
-import { useGlobalStore } from "../provider/GlobalStoreProvider";
+import { useGlobalStore } from "@/provider/GlobalStoreProvider";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
@@ -18,8 +18,8 @@ export default function Page() {
   const defaultValues = { ...info };
   const handleSubmit = (values: Record<string, any>) => {
     setIsLoading(true)
-    // redirectPath(`/verify${params.get('product') ? `?product=${params.get('product')}` : ''}`)
-    redirectPath(`/payment${params.get('product') ? `?product=${params.get('product')}` : ''}`)
+    redirectPath(`/verify${params.get('product') ? `?product=${params.get('product')}` : ''}`)
+    // redirectPath(`/payment${params.get('product') ? `?product=${params.get('product')}` : ''}`)
   };
 
   return (

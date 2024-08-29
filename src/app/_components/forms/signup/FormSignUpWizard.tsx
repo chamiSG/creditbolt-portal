@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import FormSignUp from "./FormSignUp";
-import { useGlobalStore } from "@/app/provider/GlobalStoreProvider";
+import { useGlobalStore } from "@/provider/GlobalStoreProvider";
 import { v4 as uuidv4 } from 'uuid';
 
 const FormSignUpWizard = (props: FormWizardProps) => {

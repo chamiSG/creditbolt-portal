@@ -3,7 +3,7 @@ import {
   createTRPCRouter,
   publicProcedure,
 } from "@/server/api/trpc";
-import { ID_VER_TEMPLATE, PLAID_COUNTRY_CODES, PLAID_IDV_PRODUCTS, PLAID_TRANSFER_PRODUCTS, plaidClient, WEBHOOK_URL_FOR_TRANSFOR } from "@/app/utils/plaid";
+import { ID_VER_TEMPLATE, PLAID_COUNTRY_CODES, PLAID_IDV_PRODUCTS, PLAID_TRANSFER_PRODUCTS, plaidClient, WEBHOOK_URL_FOR_TRANSFOR } from "@/utils/plaid";
 import { ACHClass, TransferRecurringCreateRequest, TransferRecurringNetwork, TransferScheduleIntervalUnit, TransferType } from "plaid";
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment'
@@ -196,35 +196,9 @@ export const plaidRouter = createTRPCRouter({
           identity_verification_id: sessionId,
         });
         const IDVData = IDVResult.data;
-        if (IDVData.status !== "success") {
-          await ctx.db.user.update({
-            where: {
-              id: IDVData.client_user_id,
-            },
-            data: {
-              is_verified: false,
-              idv_status: IDVData.status,
-              most_recent_idv_session: sessionId,
-            },
-          });
-        } else {
-          await ctx.db.user.update({
-            where: {
-              id: IDVData.client_user_id,
-            },
-            data: {
-              firstname: IDVData.user?.name?.given_name,
-              lastname: IDVData.user?.name?.family_name,
-              mobile: IDVData.user.phone_number || '',
-              is_verified: true,
-              idv_status: IDVData.status,
-              most_recent_idv_session: sessionId,
-            },
-          });
-        }
         return {
-          status: IDVData.status,
-          userId: IDVData.client_user_id
+          IDVData: IDVData,
+          sessionId: sessionId
         };
       } catch (error: any) {
         throw new Error(error);

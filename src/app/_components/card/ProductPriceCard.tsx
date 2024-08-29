@@ -1,7 +1,5 @@
 "use client";
-import NextLink from 'next/link'
-import { Box, Button, Flex, Heading, HStack, Icon, Link, ListItem, Text, UnorderedList, VStack } from '@chakra-ui/react'
-import { FiChevronsUp, FiDollarSign } from "react-icons/fi";
+import { Box, Button, Flex, Heading, Text, VStack } from '@chakra-ui/react'
 import Card from './Card';
 import baseLang from '@/snippet/en.json'
 

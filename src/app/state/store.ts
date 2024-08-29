@@ -6,6 +6,7 @@ export type GlobalState = {
   info: User
   plaid: PlaidInfo
   bill: Bill
+  verifyStatus: VerifyStatus
 }
 
 export type GlobalActions = {
@@ -18,6 +19,7 @@ export type GlobalActions = {
   setAccessToken: (value: string) => void
   setItemId: (value: string) => void
   setAccountId: (value: string) => void
+  setVerifyStatus: (value: VerifyStatus) => void
   setBill: (value: Bill) => void
   setTransferIntentId: (value: string) => void
   setPaymentType: (value: string) => void
@@ -41,7 +43,12 @@ export const defaultInitState: GlobalState = {
     paidTotalAmount: '0',
     pendingTotalAmount: '0',
     status: ''
-  }
+  },
+  verifyStatus: {
+    is_verified: false,
+    idv_status: undefined,
+    most_recent_idv_session: ''
+  },
 }
 
 export const createGlobalStore = (
@@ -61,6 +68,7 @@ export const createGlobalStore = (
       setAccountId: (value: string) => set((state) => ({ plaid: { ...state.plaid, accountId: value } })),
       setTransferIntentId: (value: string) => set((state) => ({ plaid: { ...state.plaid, transferIntentId: value } })),
       setBill: (values: Bill) => set((state) => ({ bill: { ...values } })),
+      setVerifyStatus: (values: VerifyStatus) => set((state) => ({ verifyStatus: { ...values } })),
       setPaymentType: (value: string) => set((state) => ({ plaid: { ...state.plaid, paymentType: value } })),
       resetStore: () => set(() => ({ ...defaultInitState })),
       resetPlaidStore: () => set((state) => ({ ...state, plaid: {} })),
@@ -68,8 +76,13 @@ export const createGlobalStore = (
     {
       name: 'global-store',
       partialize: (state) => ({
-        info: state.info,
-        plaid: state.plaid
+        info: {
+          ...state.info,
+          password: ''
+        },
+        plaid: state.plaid,
+        bill: state.bill,
+        verifyStatus: state.verifyStatus,
       }),
     }
   ))

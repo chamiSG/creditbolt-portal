@@ -23,7 +23,7 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 // import { getServerAuthSession } from "@/server/auth";
 
 export const Header = () => {

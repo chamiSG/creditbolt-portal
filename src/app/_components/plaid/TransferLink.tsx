@@ -1,4 +1,4 @@
-import { useGlobalStore } from "@/app/provider/GlobalStoreProvider";
+import { useGlobalStore } from "@/provider/GlobalStoreProvider";
 import { api } from "@/trpc/react";
 import { Button } from "@chakra-ui/react";
 import React, { useCallback } from "react";

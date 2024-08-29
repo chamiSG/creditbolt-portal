@@ -1,8 +1,8 @@
 import "@/styles/globals.css";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "@/trpc/react";
-import { ChakraProviders } from "@/app/provider/ChakraProviders";
-import { GlobalStoreProvider } from "@/app/provider/GlobalStoreProvider";
+import { ChakraProviders } from "@/provider/ChakraProviders";
+import { GlobalStoreProvider } from "@/provider/GlobalStoreProvider";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {

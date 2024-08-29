@@ -1,9 +1,9 @@
 import { getServerAuthSession } from "@/server/auth";
 import { HydrateClient } from "@/trpc/server";
-import SessionProvider from "./provider/SessionProvider";
 import { redirect } from "next/navigation";
 import { Header } from "./_components/header";
 import { Dashboard } from "@/app/_components/dashboard";
+import SessionProvider from "@/provider/SessionProvider";
 
 export default async function Home() {
   const session = await getServerAuthSession();

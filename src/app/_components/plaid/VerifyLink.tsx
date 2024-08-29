@@ -1,4 +1,4 @@
-import { useGlobalStore } from "@/app/provider/GlobalStoreProvider";
+import { useGlobalStore } from "@/provider/GlobalStoreProvider";
 import { api } from "@/trpc/react";
 import { Button } from "@chakra-ui/react";
 import React, { useEffect, useCallback } from "react";
@@ -20,39 +20,25 @@ const VerifyLink = ({
     (state: any) => state,
   )
 
-  const updateVerifyStatus = api.plaid.updateVerifyStatus.useMutation({
-    onSuccess: async (res: any) => {
-      if (res.status === 'success') {
-        onAction(res)
-      }
-    },
-  });
+  const updateVerifyStatus = api.plaid.updateVerifyStatus.useMutation();
 
   const onSuccess = useCallback(
-    (public_token: string, metadata: any) => {
-      updateVerifyStatus.mutate({ sessionId: metadata.link_session_id })
+    async (public_token: string, metadata: any) => {
+      const response = await updateVerifyStatus.mutateAsync({ sessionId: metadata.link_session_id })
+      onAction({
+        ...response,
+        sessionId: metadata.link_session_id
+      })
     },
-    []
+    [updateVerifyStatus, onAction]
   );
 
-  let isOauth = false;
   const config: Parameters<typeof usePlaidLink>[0] = {
     token: plaid.linkToken!,
     onSuccess,
   };
 
-  if (window.location.href.includes("?oauth_state_id=")) {
-    config.receivedRedirectUri = window.location.href;
-    isOauth = true;
-  }
-
   const { open, ready } = usePlaidLink(config);
-
-  useEffect(() => {
-    if (isOauth && ready) {
-      open();
-    }
-  }, [ready, open, isOauth]);
 
   return (
     <Button w={'full'} colorScheme="lime" onClick={() => open()} isDisabled={!ready || isDisabled} isLoading={updateVerifyStatus.isPending || isLoading}>

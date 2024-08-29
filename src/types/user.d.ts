@@ -8,7 +8,10 @@ declare global {
     email?: string;
     mobile?: string;
     dateBirth?: string;
-    address?: string;
+    address1?: string;
+    city?: string;
+    state?: string;
+    zipcode?: string;
     apt?: string;
   }
 }

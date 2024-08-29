@@ -2,7 +2,7 @@
 "use client";
 
 import { Text, VStack } from "@chakra-ui/react";
-import { getCopyRight } from '@/app/utils'
+import { getCopyRight } from '@/utils'
 import lang from '@/snippet/en.json'
 
 export default function FooterTerms() {

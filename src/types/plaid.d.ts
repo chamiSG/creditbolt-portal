@@ -22,4 +22,10 @@ declare global {
     pendingTotalAmount: string
     status: string
   }
+  
+  interface VerifyStatus {
+    is_verified: boolean,
+    idv_status: any,
+    most_recent_idv_session: string,
+  }
 }

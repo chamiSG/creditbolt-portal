@@ -1,19 +1,19 @@
 
 "use client";
 
-import { Suspense, useEffect } from "react";
-import { Container, Flex, Heading, Text, VStack } from "@chakra-ui/react";
-import { getCopyRight } from '@/app/utils'
+import { Suspense, useEffect, useState } from "react";
+import { Button, Container, Flex, Heading, Text, VStack } from "@chakra-ui/react";
 import { api } from "@/trpc/react";
-import { useGlobalStore } from "@/app/provider/GlobalStoreProvider";
+import { useGlobalStore } from "@/provider/GlobalStoreProvider";
 import { useSearchParams } from 'next/navigation'
 import lang from '@/snippet/en.json'
 import Card from "@/app/_components/card/Card";
 import VerifyLink from "@/app/_components/plaid/VerifyLink";
-import { redirectPath } from "../actions/redirect";
 
 export default function Page() {
-  const { info, setLinkToken, setHostedLinkURL, resetPlaidStore } = useGlobalStore(
+  const [status, setStatus] = useState('init')
+  const params = useSearchParams()
+  const { info, setLinkToken, setHostedLinkURL, setVerifyStatus } = useGlobalStore(
     (state: any) => state,
   )
 
@@ -25,16 +25,51 @@ export default function Page() {
   });
 
   const handleVerifyAction = (event: any) => {
-    resetPlaidStore()
-    redirectPath(`/payment`)
+    console.log("event", event)
+    setVerifyStatus({
+      is_verified: false,
+      idv_status: event.IDVData.status,
+      most_recent_idv_session: event.sessionId,
+    })
+    setStatus(event.IDVData.status)
+  }
+
+  const generateButtonElement = () => {
+    switch (status) {
+      case 'init':
+        return (
+          <VerifyLink
+            label="Start Verification"
+            isDisabled={generateLinkTokenForIdv.isPending}
+            isLoading={generateLinkTokenForIdv.isPending}
+            onAction={handleVerifyAction}
+          />
+        )
+      case 'failed':
+        return <Button as={'a'} w={'full'} colorScheme="red" href={`/signup`}>Back</Button>
+
+      case 'success':
+        return <Button as={'a'} w={'full'} colorScheme="lime" href={`/payment${params.get('product') ? `?product=${params.get('product')}` : ''}`}>Next</Button>
+
+      default:
+        return (
+          <VerifyLink
+            label="Start Verification"
+            isDisabled={generateLinkTokenForIdv.isPending}
+            isLoading={generateLinkTokenForIdv.isPending}
+            onAction={handleVerifyAction}
+          />
+        )
+    }
   }
 
   useEffect(() => {
-    if (!info.id || !info.email) {
+    if (!info || !info.id || !info.email) {
       return
     }
+    console.log("Verify")
     generateLinkTokenForIdv.mutate({ userId: info.id, email: info.email })
-  }, [info])
+  }, [info, generateLinkTokenForIdv])
 
   return (
     <Suspense>
@@ -45,12 +80,7 @@ export default function Page() {
             <Text color={'gray.600'}>{lang.portal.identity.step1.description}</Text>
           </VStack>
           <Flex w={'full'} mt={6} justifyContent={'space-between'} gap={4}>
-            <VerifyLink 
-            label="Start Verification"
-            isDisabled={generateLinkTokenForIdv.isPending} 
-            isLoading={generateLinkTokenForIdv.isPending}
-            onAction={handleVerifyAction}
-            />
+            {generateButtonElement()}
           </Flex>
         </Card>
       </Container>

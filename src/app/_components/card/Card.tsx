@@ -1,6 +1,6 @@
 // import { Box, useStyleConfig} from '@chakra-ui/react';
 
-import { CustomCardProps } from '@/app/utils/theme/theme';
+import { CustomCardProps } from '@/utils/theme/theme';
 import { useStyleConfig, chakra, forwardRef } from '@chakra-ui/react';
 const CustomCard = forwardRef<CustomCardProps, 'div'>((props, ref) => {
 	const { size, variant, ...rest } = props;

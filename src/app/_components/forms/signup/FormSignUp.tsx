@@ -8,9 +8,9 @@ import lang from '@/snippet/en.json'
 
 import Card from '@/app/_components/card/Card';
 import { Icon } from "@chakra-ui/icons";
-import { getTemplateRows } from "@/app/utils";
+import { getTemplateRows } from "@/utils";
 import { FiCheck, FiEye, FiEyeOff } from "react-icons/fi";
-import { useGlobalStore } from "@/app/provider/GlobalStoreProvider";
+import { useGlobalStore } from "@/provider/GlobalStoreProvider";
 
 const FormSignUp = (props: FormProps) => {
   const { title, description, fields, defaultValues, onSubmit, isLoading } = props;

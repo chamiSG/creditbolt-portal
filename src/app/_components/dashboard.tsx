@@ -66,7 +66,28 @@ export function Dashboard() {
                   <VStack py={3} px={8} borderBottomRadius={'10px'} bg={'amber.50'}>
                     <Heading size={'md'} color={`amber.400`}>{lang.portal.dashboard.product.title}</Heading>
                     <Text fontSize={'14px'}>{lang.portal.dashboard.product.description}</Text>
+                    <Stack flexDir={{sm: 'column', md: 'row'}} spacing={3} my={4}>
+                      <Button as={'a'} py={1} px={10} h={'100%'} borderRadius={'50px'} colorScheme="orange" href={`/products/revolv`}>
+                        <Stack spacing={1} alignItems={'center'}>
+                          <Text fontSize={'0.875rem'}>Revolv</Text>
+                          <Text fontSize={'0.65rem'}>Build revolving credit</Text>
+                        </Stack>
+                      </Button>
+                      <Button as={'a'} py={1} px={10} h={'100%'} borderRadius={'50px'} colorScheme="lime" href={`/products/revolv`}>
+                        <Stack spacing={1} alignItems={'center'}>
+                          <Text fontSize={'0.875rem'}>MAGNUM</Text>
+                          <Text fontSize={'0.65rem'}>Build magnum credit</Text>
+                        </Stack>
+                      </Button>
+                      <Button as={'a'} py={1} px={10} h={'100%'} borderRadius={'50px'} colorScheme="brand" href={`/products/revolv`}>
+                        <Stack spacing={1} alignItems={'center'}>
+                          <Text fontSize={'0.875rem'}>CS Business</Text>
+                          <Text fontSize={'0.65rem'}>Build business credit</Text>
+                        </Stack>
+                      </Button>
+                    </Stack>
                   </VStack>
+
                 </Card>
               </VStack>
             </GridItem>

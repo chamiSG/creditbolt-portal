@@ -24,6 +24,7 @@ const schema = {
   apt: z.string(),
   bill: z.any(),
   plaid: z.any(),
+  verifyStatus: z.any(),
 }
 
 export const userRouter = createTRPCRouter({
@@ -48,7 +49,9 @@ export const userRouter = createTRPCRouter({
           zipcode: input.zipcode,
           country: input.country,
           apt: input.apt,
-          is_verified: false,
+          is_verified: input.verifyStatus.is_verified,
+          idv_status: input.verifyStatus.idv_status,
+          most_recent_idv_session: input.verifyStatus.most_recent_idv_session,
         },
       });
       if(!id){
@@ -62,8 +65,6 @@ export const userRouter = createTRPCRouter({
           providerAccountId: id,
         },
       });
-      console.log("input.bill", input.bill)
-      console.log("plaid", input.plaid)
       const createdBill = await ctx.db.bill.create({
         data: {
           id: input.bill.id,
